@@ -26,6 +26,18 @@ CREATE TABLE StoreProductMapping (
     FOREIGN KEY (ProductID) REFERENCES Product(ProductID)
 );
 
+-- Create the "ApiLog" table
+CREATE TABLE dbo.ApiLog (
+    ApiLogID INT IDENTITY(1,1) PRIMARY KEY,
+    MachineName VARCHAR(50),
+    Logged DATETIME,
+    Level VARCHAR(10),
+    Message NVARCHAR(MAX),
+    Logger VARCHAR(255),
+    Callsite NVARCHAR(MAX),
+    Exception NVARCHAR(MAX)
+);
+
 ----------------------
 -- Insert data into the "Store" table
 INSERT INTO Store (StoreName)

@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using System;
 using StoreCoreApi.Infraestructure.Store;
 using StoreCoreApi.Db.Models.Store.Models;
-using Microsoft.AspNetCore.Authorization;
 
 namespace StoreCoreApi.Controllers;
 
@@ -16,11 +14,10 @@ public class StoreController : ControllerBase{
         _catalogservices = catalogservices;
     }
 
-    [HttpGet("Catalog/UserList")]
-    public IActionResult GetListUsers()
+    [HttpGet("Catalog/Product")]
+    public ActionResult<List<Product>> GetListProduct()
     {
-        var response = _catalogservices.GetListProduct(); 
-        return Ok(response);
+        return _catalogservices.GetListProduct();
     }
 
 }
