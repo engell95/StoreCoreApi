@@ -3,6 +3,7 @@ using StoreCoreApi.Infraestructure.Store;
 using StoreCoreApi.Db.Models.Store.Models;
 using NLog;
 using NLog.Web;
+using Microsoft.AspNetCore.Diagnostics;
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 logger.Debug("init main");
@@ -34,8 +35,28 @@ try
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
     {
+        app.UseDeveloperExceptionPage();
         app.UseSwagger();
         app.UseSwaggerUI();
+    }
+    else{
+       app.UseExceptionHandler(errorApp =>
+        {
+            errorApp.Run(async context =>
+            {
+                context.Response.StatusCode = 500; // Internal Server Error
+                context.Response.ContentType = "application/json";
+
+                var errorFeature = context.Features.Get<IExceptionHandlerFeature>();
+                if (errorFeature != null)
+                {
+                    var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
+                    logger.Error(errorFeature.Error, "Unhandled error occurred");
+
+                    await context.Response.WriteAsJsonAsync(new { error = "Internal Server Error" });
+                }
+            });
+        });
     }
 
     // Configurar middleware para redirección

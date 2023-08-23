@@ -6,18 +6,26 @@ namespace StoreCoreApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class StoreController : ControllerBase{
+public class CatalogController : ControllerBase{
     private readonly ICatalogServices _catalogservices; 
 
-    public StoreController(ICatalogServices catalogservices)
+    public CatalogController(ICatalogServices catalogservices)
     {
         _catalogservices = catalogservices;
     }
+    
+    [HttpGet("Store")]
+    public ActionResult<List<Store>> GetListStore()
+    {
+        return _catalogservices.GetListStore();
+    }
 
-    [HttpGet("Catalog/Product")]
+    [HttpGet("Product")]
     public ActionResult<List<Product>> GetListProduct()
     {
         return _catalogservices.GetListProduct();
     }
+
+
 
 }
